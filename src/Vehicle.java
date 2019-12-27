@@ -14,5 +14,7 @@ public class Vehicle {
         this.currentRoad=currentRoad;
     }
     //Method to define the behaviour of the Vehicle
-    
+    public void move(){
+        this.currentPosition+=1;
+    }
 }
