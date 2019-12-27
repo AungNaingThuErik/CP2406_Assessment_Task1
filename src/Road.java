@@ -33,5 +33,30 @@ public class Road {
         roadObject[this.length-1]=trafficLight;
 
     }
-    
+    //Method to get the vehicle position information
+    public String GetVehiclePosition(Vehicle vehicle){
+        if(vehicle.currentPosition<this.length){
+            return "InPosition";
+        }
+        else if(vehicle.currentPosition==this.length){
+            return "EndOfRoad";
+        }
+        return null;
+    }
+    //Method to update the vehicle position to move on the road
+    public void UpdatePosition(Vehicle vehicle){
+        if(GetVehiclePosition(vehicle).equalsIgnoreCase("InPosition")){
+            this.roadObject[vehicle.currentPosition] = this.vehicle;
+        }
+        else if(GetVehiclePosition(vehicle).equalsIgnoreCase("EndOfRoad")){
+            if(trafficLight.color.equalsIgnoreCase("Green")) {
+                vehicle.currentPosition = 1;
+                vehicle.currentRoad = nextRoad;
+                isEndOfRoad = true;
+            }
+            else{
+                vehicle.currentPosition-=1;
+            }
+        }
+    }
 }
