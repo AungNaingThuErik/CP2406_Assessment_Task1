@@ -21,5 +21,17 @@ public class Road {
         AddVehicle(vehicle);
         AddTrafficLight(trafficLight);
     }
+    //Method to add vehicle on the road object
+    public void AddVehicle(Vehicle vehicle){
+        this.roadObject=new Object[length];
+        roadObject[0]=vehicle;
+
+    }
+    //Method to add traffic light on the road object
+    public void AddTrafficLight(TrafficLight trafficLight){
+        this.roadObject=new Object[length];
+        roadObject[this.length-1]=trafficLight;
+
+    }
     
 }
