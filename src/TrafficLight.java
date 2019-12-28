@@ -1,5 +1,5 @@
 public class TrafficLight {
-    protected String color="Green";
+    protected String color;
     protected double rateOfChange;
     private double randomRange, maxRange = 10.0, minRange = 1.0;
     //Default Constructor
