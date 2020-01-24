@@ -1,26 +1,35 @@
 public class TrafficLight {
-    protected String color;
-    protected double rateOfChange;
-    private double randomRange, maxRange = 10.0, minRange = 1.0;
-    //Default Constructor
-    public TrafficLight(){
+    private double rateOfChange = 0.7;
+    private String currentColor = "green";
+    private int redTime = 0;
+    private int greenTime = 0;
 
+
+    public String getCurrentColor(){
+        return currentColor;
     }
-    //Constructor with named Parameters
-    public TrafficLight(String color, double rateOfChange){
-        this.color=color;
-        this.rateOfChange=rateOfChange;
-    }
-    //Method to return random double value between minimum and maximum range
-    public static double GetRandomRange(double maxRange, double minRange){
-        return (Math.random()*((maxRange-minRange)+1))+minRange;
-    }
-    //Method to define the state of the Traffic Light
-    public void Operate(){
-        randomRange = GetRandomRange(maxRange,minRange);
-        if(rateOfChange>randomRange)
-            color="Green";
+
+    public void operate(){
+
+        if (currentColor.equals("red")){ //forces the light to stay red for a set number of cycles
+            rateOfChange = 1;
+            redTime += 1;
+        }
+        else{
+            rateOfChange = 0;
+            greenTime +=1;
+        }
+
+        if(redTime == 10 || greenTime == 6){  // gets the light changing colors after a certain amount of time elapses
+            redTime = 0;
+            greenTime = 0;
+            rateOfChange = 0.3;
+        }
+        double num = Math.random(); // gets random number between 0 and 1
+        if(num < rateOfChange) {  // checks whether light should be green or red
+            currentColor = "red";
+        }
         else
-            color="Red";
+            currentColor = "green";
     }
 }
