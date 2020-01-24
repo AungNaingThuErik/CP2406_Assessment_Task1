@@ -6,10 +6,12 @@ public class Car extends Vehicle {
         width = 30;
         height = 12;
     }
+    //paint car horizontally for the horizontal road
     public void paintMeHorizontal(Graphics g){
         g.setColor(Color.CYAN);
         g.fillRect(xPos, yPos, width, height);
     }
+    //paint car vertically for the vertical road
     public void paintMeVertical(Graphics g){
         g.setColor(Color.CYAN);
         g.fillRect(yPos, xPos, height, width);

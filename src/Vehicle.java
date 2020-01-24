@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Vehicle {
-    private Road road; // road that the car is on
+    private Road road; // To see road that the car is on
     protected int yPos; // current position on map
     protected int xPos; // current position on map
     protected int  height;
@@ -34,6 +34,8 @@ public class Vehicle {
     public void setCurrentRoad(Road road){
         this.road = road;
     }
+
+    //To check whether the car is at the end of the road
     private boolean checkIfAtEndOfRoad(){
         if(getRoadCarIsOn().getTrafficDirection().equals("east") || getRoadCarIsOn().getTrafficDirection().equals("south")){
             return (xPos+width >= getRoadCarIsOn().getEndRoadXPos());
@@ -44,6 +46,8 @@ public class Vehicle {
         else
             return true;
     }
+
+    //To check whether the car are in collision
     public boolean collision(int x, Vehicle car){
         String direction = getRoadCarIsOn().getTrafficDirection();
         for (int i = 0; i < Map.cars.size(); i++) {
@@ -65,6 +69,8 @@ public class Vehicle {
         }
         return false;
     }
+
+    //To check whether we can move forward
     private boolean canMoveForward(){
         String direction = getRoadCarIsOn().getTrafficDirection();
         if(xPos+width >= getRoadCarIsOn().getRoadLength()*25-25+getRoadCarIsOn().getRoadXPos() && (direction.equals("east") || direction.equals("south"))
@@ -79,9 +85,12 @@ public class Vehicle {
         }
         return true;
     }
+    //To get the current position of the Road
     private int getIndexOfCurrentRoad(){
         return Map.roads.indexOf(road);
     }
+
+    //To get the position of the next Road
     private Road nextRoad(){
         int otherRoadXPos;
         int otherRoadYPos;
@@ -193,7 +202,7 @@ public class Vehicle {
         return nextRoad;
     }
 
-
+    //To make the car move
     public void move() {
         if(canMoveForward()) {
             if(road.getTrafficDirection().equals("east") || road.getTrafficDirection().equals("south")) {

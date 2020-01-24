@@ -132,12 +132,11 @@ public class Simulator implements ActionListener, Runnable, MouseListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Map.trafficLights.add(light);
         frame.repaint();
-
     }
 
     public static void main(String[] args){
         new Simulator();
-        Map map = new Map();
+        Map map = new Map();//called the map with list of vehicles, roads, and traffic light
     }
 
     @Override
@@ -267,6 +266,7 @@ public class Simulator implements ActionListener, Runnable, MouseListener {
 
     }
 
+    //to configure simulation state
     @Override
     public void run() {
         boolean carCollision = false;

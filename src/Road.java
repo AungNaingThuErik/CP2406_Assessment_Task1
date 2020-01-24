@@ -13,6 +13,7 @@ public class Road extends JPanel {
     private String orientation;
     public String trafficDirection;
 
+    //paints road frame
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         g.setColor(Color.GRAY);
@@ -74,6 +75,7 @@ public class Road extends JPanel {
         }
     }
 
+    //paints road
     public void paintRoad(Graphics g){
         if(orientation.equals("horizontal")) {
             g.setColor(Color.black);

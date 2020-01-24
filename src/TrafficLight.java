@@ -9,6 +9,7 @@ public class TrafficLight {
         return currentColor;
     }
 
+    //To change color randomly
     public void operate(){
 
         if (currentColor.equals("red")){ //forces the light to stay red for a set number of cycles
