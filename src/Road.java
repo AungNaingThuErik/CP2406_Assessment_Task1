@@ -1,62 +1,142 @@
-public class Road {
-    protected String name; //Name of Road
-    protected int roadNumber, length;
-    protected boolean isEndOfRoad = false;
-    private Object [] roadObject;
-    protected Road nextRoad;
-    private Vehicle vehicle=new Vehicle();
-    private TrafficLight trafficLight=new TrafficLight();
-    //Default Constructor
-    public Road(){
+import javax.swing.*;
+import java.awt.*;
 
-    }
-    //Constructor with named Parameters
-    public Road(int roadNumber, String name, int length, Vehicle vehicle, TrafficLight trafficLight, Road nextRoad){
-        this.roadNumber=roadNumber;
-        this.name= name;
-        this.length=length;
-        this.vehicle=vehicle;
-        this.trafficLight=trafficLight;
-        this.nextRoad=nextRoad;
-        AddVehicle(vehicle);
-        AddTrafficLight(trafficLight);
-    }
-    //Method to add vehicle on the road object
-    public void AddVehicle(Vehicle vehicle){
-        this.roadObject=new Object[length];
-        roadObject[0]=vehicle;
+public class Road extends JPanel {
+    private TrafficLight light;
+    private int numOfSegments; //length of road
+    private final int roadWidth = 100;
+    final int roadYPos;
+    final int endRoadYPos;
+    final int roadXPos;
+    final int endRoadXPos;
+    private Color lightColor = Color.green;
+    private String orientation;
+    public String trafficDirection;
 
-    }
-    //Method to add traffic light on the road object
-    public void AddTrafficLight(TrafficLight trafficLight){
-        this.roadObject=new Object[length];
-        roadObject[this.length-1]=trafficLight;
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 0, 1200, 1200);
 
-    }
-    //Method to get the vehicle position information
-    public String GetVehiclePosition(Vehicle vehicle){
-        if(vehicle.currentPosition<this.length){
-            return "InPosition";
-        }
-        else if(vehicle.currentPosition==this.length){
-            return "EndOfRoad";
-        }
-        return null;
-    }
-    //Method to update the vehicle position to move on the road
-    public void UpdatePosition(Vehicle vehicle){
-        if(GetVehiclePosition(vehicle).equalsIgnoreCase("InPosition")){
-            this.roadObject[vehicle.currentPosition] = this.vehicle;
-        }
-        else if(GetVehiclePosition(vehicle).equalsIgnoreCase("EndOfRoad")){
-            if(trafficLight.color.equalsIgnoreCase("Green")) {
-                vehicle.currentPosition = 1;
-                vehicle.currentRoad = nextRoad;
-                isEndOfRoad = true;
+        for(int z = 0; z < Map.roads.size();z++){
+            Road r = Map.roads.get(z);
+            r.paintRoad(g);
+            if(r.getOrientation().equals("vertical")){
+                for (int c = 0; c < Map.cars.size(); c++) {
+                    Vehicle car = Map.cars.get(c);
+                    if(car.getRoadCarIsOn().equals(r)) {
+                        car.paintMeVertical(g);
+                    }
+                }
+                if (r.getTrafficLight() != null) {
+                    r.paintLight(g);
+                }
             }
             else{
-                vehicle.currentPosition-=1;
+                for (int c = 0; c < Map.cars.size(); c++) {
+                    Vehicle car = Map.cars.get(c);
+                    if(car.getRoadCarIsOn().equals(r)) {
+                        car.paintMeHorizontal(g);
+                    }
+                }
+                if (r.getTrafficLight() != null) {
+                    r.paintLight(g);
+                }
             }
         }
     }
+
+    // paints traffic light
+    public void paintLight(Graphics g){
+        g.setColor(lightColor);
+        if(getOrientation().equals("horizontal")) {
+            if (getTrafficDirection().equals("east")) {
+                g.fillRect(roadXPos + numOfSegments * 25 - 10, roadYPos - 20, 10, 20);
+                g.setColor(Color.black);
+                g.drawRect(roadXPos + numOfSegments * 25 - 10, roadYPos - 20, 10, 20);
+            } else {
+                g.fillRect(roadXPos, roadYPos - 20, 10, 20);
+                g.setColor(Color.black);
+                g.drawRect(roadXPos, roadYPos - 20, 10, 20);
+            }
+        }
+        else{
+            if (getTrafficDirection().equals("south")) {
+                g.fillRect(roadYPos - 20, roadXPos + numOfSegments * 25 - 10, 20, 10);
+                g.setColor(Color.black);
+                g.drawRect(roadYPos - 20, roadXPos + numOfSegments * 25 - 10, 20, 10);
+            }
+            else{
+                g.fillRect(roadYPos - 20, roadXPos, 20, 10);
+                g.setColor(Color.black);
+                g.drawRect(roadYPos - 20, roadXPos, 20, 10);
+            }
+        }
+    }
+
+    public void paintRoad(Graphics g){
+        if(orientation.equals("horizontal")) {
+            g.setColor(Color.black);
+            g.fillRect(roadXPos, roadYPos,numOfSegments * 25, roadWidth);
+            g.setColor(Color.WHITE);
+            for (int j = 0; j < numOfSegments * 25; j = j + 50) { // line being drawn
+                g.fillRect(roadXPos + j, roadYPos + roadWidth / 2, 30, 2);
+            }
+        }
+        else{
+            g.setColor(Color.black);
+            g.fillRect(roadYPos, roadXPos, roadWidth, numOfSegments * 25);
+            g.setColor(Color.WHITE);
+            for (int j = 0; j < numOfSegments * 25; j = j + 50) { // line being drawn
+                g.fillRect( roadYPos + roadWidth / 2, roadXPos + j, 2,30);
+            }
+        }
+    }
+
+    Road(int numOfSegments, String orientation, int xPos, int yPos, String direction){
+        super();
+        this.numOfSegments = numOfSegments*2;
+        this.orientation = orientation;
+        this.roadXPos = xPos;
+        this.roadYPos = yPos;
+        this.endRoadXPos = xPos + numOfSegments * 50;
+        this.endRoadYPos = yPos + numOfSegments * 50;
+        this.trafficDirection = direction;
+    }
+    Road(int numOfSegments, String orientation, int xPos, int yPos, String direction, TrafficLight light){
+        super();
+        this.numOfSegments = numOfSegments*2;
+        this.orientation = orientation;
+        this.light = light;
+        this.roadXPos = xPos;
+        this.roadYPos = yPos;
+        this.endRoadXPos = xPos + numOfSegments * 50;
+        this.endRoadYPos = yPos + numOfSegments * 50;
+        this.trafficDirection = direction;
+
+    }
+    public String getOrientation(){ return orientation;}
+    public TrafficLight getTrafficLight(){
+        return light;
+    }
+    public int getRoadLength(){
+        return numOfSegments;
+    }
+    public int getRoadYPos(){
+        return roadYPos;
+    }
+    public int getRoadXPos(){
+        return roadXPos;
+    }
+    public int getEndRoadYPos(){
+        return endRoadYPos;
+    }
+    public int getEndRoadXPos(){
+        return endRoadXPos;
+    }
+    public String getTrafficDirection(){ return trafficDirection; }
+    public void setLightColor(Color c){
+        lightColor = c;
+    }
+
 }
